@@ -1,0 +1,75 @@
+matplotlib.pyplot is a collection of functions that make matplotlib work like MATLAB. Each pyplot function makes some change to a figure: e.g., creates a figure, creates a plotting area in a figure, plots some lines in a plotting area, decorates the plot with labels, etc.
+
+
+plot is a versatile function, and will take an arbitrary number of arguments. For example, to plot x versus y, you can write:
+
+plt.plot([1, 2, 3, 4], [1, 4, 9, 16])
+
+For every x, y pair of arguments, there is an optional third argument which is the format string that indicates the color and line type of the plot. The letters and symbols of the format string are from MATLAB, and you concatenate a color string with a line style string. The default format string is 'b-', which is a solid blue line. For example, to plot the above with red circles, you would issue
+
+plt.plot([1, 2, 3, 4], [1, 4, 9, 16], 'ro')
+plt.axis([0, 6, 0, 20])
+plt.show()
+
+See the plot documentation for a complete list of line styles and format strings. The axis function in the example above takes a list of [xmin, xmax, ymin, ymax] and specifies the viewport of the axes
+
+Matplotlib allows you to provide such an object with the data keyword argument. If provided, then you may generate plots with the strings corresponding to these variables.
+
+data = {'a': np.arange(50),
+        'c': np.random.randint(0, 50, 50),
+        'd': np.random.randn(50)}
+data['b'] = data['a'] + 10 * np.random.randn(50)
+data['d'] = np.abs(data['d']) * 100
+
+plt.scatter('a', 'b', c='c', s='d', data=data)
+plt.xlabel('entry a')
+plt.ylabel('entry b')
+plt.show()
+
+It is also possible to create a plot using categorical variables. Matplotlib allows you to pass categorical variables directly to many plotting functions. For example:
+
+names = ['group_a', 'group_b', 'group_c']
+values = [1, 10, 100]
+
+plt.figure(figsize=(9, 3))
+
+plt.subplot(131)
+plt.bar(names, values)
+plt.subplot(132)
+plt.scatter(names, values)
+plt.subplot(133)
+plt.plot(names, values)
+plt.suptitle('Categorical Plotting')
+plt.show()
+
+
+MATLAB, and pyplot, have the concept of the current figure and the current axes. All plotting functions apply to the current axes. The function gca returns the current axes (a matplotlib.axes.Axes instance), and gcf returns the current figure (a matplotlib.figure.Figure instance). Normally, you don't have to worry about this, because it is all taken care of behind the scenes. Below is a script to create two subplots.
+
+def f(t):
+    return np.exp(-t) * np.cos(2*np.pi*t)
+
+t1 = np.arange(0.0, 5.0, 0.1)
+t2 = np.arange(0.0, 5.0, 0.02)
+
+plt.figure()
+plt.subplot(211)
+plt.plot(t1, f(t1), 'bo', t2, f(t2), 'k')
+
+plt.subplot(212)
+plt.plot(t2, np.cos(2*np.pi*t2), 'r--')
+plt.show()
+
+
+text can be used to add text in an arbitrary location, and xlabel, ylabel and title are used to add text in the indicated locations (see Text in Matplotlib Plots for a more detailed example)
+
+mu, sigma = 100, 15
+x = mu + sigma * np.random.randn(10000)
+
+# the histogram of the data
+n, bins, patches = plt.hist(x, 50, density=True, facecolor='g', alpha=0.75)
+
+
+plt.xlabel('Smarts')
+plt.ylabel('Probability')
+plt.title('Histogram of IQ')
+

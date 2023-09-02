@@ -1,0 +1,28 @@
+NumPy gives you an enormous range of fast and efficient ways of creating arrays and manipulating numerical data inside them. While a Python list can contain different data types within a single list, all of the elements in a NumPy array should be homogeneous. The mathematical operations that are meant to be performed on arrays would be extremely inefficient if the arrays weren’t homogeneous.
+
+
+NumPy arrays are faster and more compact than Python lists. An array consumes less memory and is convenient to use. NumPy uses much less memory to store data and it provides a mechanism of specifying the data types. This allows the code to be optimized even further.
+
+
+FOR MORE
+*************************************************************************
+https://numpy.org/doc/1.25/user/absolute_beginners.html#welcome-to-numpy
+
+pandas provides the read_csv() function to read data stored as a csv file into a pandas DataFrame. pandas supports many different file formats or data sources out of the box (csv, excel, sql, json, parquet, …), each of them with the prefix read_*
+
+
+To manually store data in a table, create a DataFrame. When using a Python dictionary of lists, the dictionary keys will be used as column headers and the values in each list as columns of the DataFrame.
+
+Each column in a DataFrame is a Series
+
+You can create a Series from scratch as well:
+
+ages = pd.Series([22, 35, 58], name="Age")
+
+A check on how pandas interpreted each of the column data types can be done by requesting the pandas dtypes attribute:
+
+The describe() method provides a quick overview of the numerical data in a DataFrame. As the Name and Sex columns are textual data, these are by default not taken into account by the describe() method.
+
+FOR MORE
+***************************************
+https://pandas.pydata.org/docs/user_guide/10min.html
