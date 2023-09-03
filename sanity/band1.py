@@ -4,7 +4,7 @@ import numpy as np
 def matrix(days):
     tdays=503-days
     # read the company names
-    tickers=pd.read_csv('C:\\Users\\abhin\\Desktop\\bollinger\\tickers.csv')['tickers'].to_numpy()
+    tickers=pd.read_csv('C:\\Users\\abhin\\Desktop\\trade\\bollinger\\tickers.csv')['tickers'].to_numpy()
     # create a matrix with no of companies and real trading days 
     result=np.zeros((954,tdays))
     #calculating how much to invest in each day for buying and selling
@@ -12,12 +12,13 @@ def matrix(days):
         # read each company
         path='C:\\Users\\abhin\\Downloads\\tickers-20230818T020407Z-001\\tickers\\'+tickers[i]+'.csv'
         data=pd.read_csv(path)
-        data['mean']=data['close'].rolling(days).mean()
-        data['std']=data['close'].rolling(days).std()
+        data['op']=data['open'].shift(-1)
+        data['mean']=data['op'].rolling(days).mean()
+        data['std']=data['op'].rolling(days).std()
         data['pro']=data['mean']+2*data['std']
         data['loss']=data['mean']-2*data['std']
-        data['buy']=data['close']<data['loss']
-        data['sell']=data['close']>data['pro']
+        data['buy']=data['open']<data['loss']
+        data['sell']=data['open']>data['pro']
         data=data[days-1:-1]
         buy=data['buy'].to_numpy()
         sell=data['sell'].to_numpy()

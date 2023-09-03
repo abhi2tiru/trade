@@ -3,8 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from band1 import matrix
 import plotly.express as px
+import sys
+sys.path.append("C:\\Users\\abhin\\Desktop\\trade\\data")
 #getting symbol list
-tickers=pd.read_csv('C:\\Users\\abhin\\Desktop\\bollinger\\tickers.csv')['tickers'].to_numpy()
+tickers=pd.read_csv('C:\\Users\\abhin\\Desktop\\trade\\bollinger\\tickers.csv')['tickers'].to_numpy()
 def band(days):
 #getting no of buy and sell companies list  
     data=matrix(days)
@@ -20,12 +22,13 @@ def band(days):
         path='C:\\Users\\abhin\\Downloads\\tickers-20230818T020407Z-001\\tickers\\'+tickers[i]+'.csv'
         data=pd.read_csv(path)
         #analyzing the company data
-        data['mean']=data['close'].rolling(days).mean()
-        data['std']=data['close'].rolling(days).std()
-        data['gain']=data['close'].shift(-1)
-        data['gain']=data['gain']/data['close']
-        data['buy']=data['close']<(data['mean']-2*data['std'])
-        data['sell']=data['close']>(data['mean']+2*data['std'])
+        data['op']=data['open'].shift(-1)
+        data['mean']=data['op'].rolling(days).mean()
+        data['std']=data['op'].rolling(days).std()
+        data['gain']=data['open'].shift(-1)
+        data['gain']=data['gain']/data['open']
+        data['buy']=data['open']<(data['mean']-2*data['std'])
+        data['sell']=data['open']>(data['mean']+2*data['std'])
         # cleaning the data
         data=data[days-1:-1]
         gain=data['gain'].to_numpy()
@@ -38,23 +41,24 @@ def band(days):
             if sell[j]:
                 profits[j]+=money/loss[j]*(1-gain[j])    
     tstat=profits.mean()/profits.std()
-    if tstat>0:
+    if tstat>0 or tstat<0:
         path='C:\\Users\\abhin\\Downloads\\tickers-20230818T020407Z-001\\tickers\\AAPL.csv'
         data=pd.read_csv(path)
         data['date']=data['timestamp'].apply(lambda x:pd.to_datetime(x*1000000))
         date=data['date'].to_numpy()
         lamp=np.zeros(503)
-        lamp[days-1:-1]=profits
+        lamp[days-1:-2]=profits
         s='band_'+str(days)
         df=pd.DataFrame({'date':date,s:lamp.cumsum()})
-        #df.to_csv(s+'.csv')
+        df.to_csv(s+'_d-1.csv')
         fig=px.line(df,x="date",y=s)
         fig.show()
     #printing tstat
     print('mean_days '+str( days))
     print('Total profits '+str(profits.sum()))
     print('tstat '+str(profits.mean()/profits.std())) 
-
+    
+    
     return profits.mean()/profits.std()
     #plotting the graph
 band(14)
